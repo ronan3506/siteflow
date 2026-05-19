@@ -1,0 +1,78 @@
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Phone Frame ──────────────────────────────────────────────────────── */
+/* Outer bezel ring — dark #1A1A1A, thin padding creates the frame effect. */
+.phone-frame {
+  position: relative;
+  background: #1A1A1A;
+  border-radius: 54px;
+  padding: 14px 12px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 40px 80px -20px rgba(0,0,0,0.55),
+    0 20px 40px -10px rgba(0,0,0,0.35),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+  flex-shrink: 0;
+}
+
+/* Side buttons (volume + power) — purely decorative CSS shapes */
+.phone-frame::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 118px;
+  width: 4px;
+  height: 32px;
+  background: #111;
+  border-radius: 2px 0 0 2px;
+  box-shadow: 0 44px 0 #111, 0 -44px 0 #111;
+}
+.phone-frame::after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  top: 160px;
+  width: 4px;
+  height: 56px;
+  background: #111;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ─── Phone Shell (inner screen) ───────────────────────────────────────── */
+.phone-shell {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  background: #fbf9f8;
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: 40px;
+  /* Inner shadow for depth */
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  transform-origin: center center;
+}
+
+/* Scale the fixed 390x844 design to fit any viewport while preserving
+   aspect ratio. Uses svw/svh (small viewport units) so the scale stays
+   stable when the mobile URL bar shows/hides — no live resizing.
+   Internal layouts remain pixel-identical across every device. */
+@media (max-width: 500px), (max-height: 960px) {
+  .phone-frame {
+    padding: 10px 8px;
+    border-radius: 46px;
+  }
+  .phone-shell {
+    transform: scale(
+      min(calc((100svw - 40px) / 390), calc((100svh - 60px) / 844))
+    );
+    border-radius: 36px;
+  }
+}
+
+/* Disabled hiding of phone frame on very small screens to keep frame visible */
