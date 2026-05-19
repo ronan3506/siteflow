@@ -1,6 +1,7 @@
 {
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-  "buildCommand": "npx pnpm install --no-frozen-lockfile && npx pnpm build",
+  "framework": "vite",
+  "buildCommand": "pnpm build",
   "outputDirectory": "dist",
-  "installCommand": "npm install -g pnpm && pnpm install --no-frozen-lockfile"
+  "installCommand": "corepack enable && pnpm install --frozen-lockfile"
 }
