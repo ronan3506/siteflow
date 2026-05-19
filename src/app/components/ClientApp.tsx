@@ -9,6 +9,9 @@ import InteractiveTimeline, { type TimelineTaskId } from "./InteractiveTimeline"
 import TimelineTaskDetail from "./TimelineTaskDetail";
 import TimelineDecisionDetail from "./TimelineDecisionDetail";
 import TimelineSiteUpdateDetail from "./TimelineSiteUpdateDetail";
+import { useLanguage } from "../i18n/LanguageContext";
+import { useTranslations } from "../i18n/translations";
+import { LangPickerModal } from "./screens/LangPickerModal";
 
 // Client Figma screen imports
 import Component2Descisons from "../../imports/2Descisons/2Descisons";
@@ -123,6 +126,9 @@ const detailVariants = {
 
 // ─── PersistentHeader ─────────────────────────────────────────────────────────
 function PersistentHeader({ onMenuOpen }: { onMenuOpen: () => void }) {
+  const { lang } = useLanguage();
+  const t = useTranslations(lang);
+  const [langOpen, setLangOpen] = useState(false);
   return (
     <div className="absolute top-0 left-0 right-0 overflow-hidden bg-white z-40" style={{ height: HEADER_H }}>
       <div style={{
@@ -138,24 +144,16 @@ function PersistentHeader({ onMenuOpen }: { onMenuOpen: () => void }) {
             style={{ left: 8, top: 8, width: 56, height: 48, background: "transparent", zIndex: 10 }}
           />
           {/* Language toggle */}
-          <div className="absolute left-[308px] top-[17px]">
-            <div className="absolute bg-[#7a3100] h-[31px] left-0 rounded-[28.615px] top-0 w-[71.538px]" />
-            <div className="-translate-y-1/2 absolute capitalize flex flex-col font-['Outfit:Regular','Noto_Sans_Kannada:Regular',sans-serif] justify-center leading-[0] left-[35.77px] text-[15.296px] text-white top-[14.08px] tracking-[-0.1683px] whitespace-nowrap">
-              <p className="leading-[1.5]">ಕನ್ನ</p>
-            </div>
-            <div className="absolute left-[9.94px] size-[25.833px] top-[2.58px]">
-              <svg className="absolute block inset-0 size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 25.8333 25.8333">
-                <g clipPath="url(#client-persist-clip)">
-                  <path d={headerSvgPaths.p2e913cc0} fill="white" />
-                </g>
-                <defs>
-                  <clipPath id="client-persist-clip">
-                    <rect fill="white" height="25.8333" width="25.8333" />
-                  </clipPath>
-                </defs>
+          <button onClick={() => setLangOpen(true)} className="absolute bg-[#7a3100] h-[31px] left-[300px] rounded-[28.615px] top-[17px] px-[12px] flex items-center gap-[6px] cursor-pointer active:opacity-80 transition-opacity" style={{ border: 'none', zIndex: 20 }}>
+            <span className="capitalize font-['Outfit:Regular',sans-serif] text-[15.3px] text-white whitespace-nowrap leading-none">
+              {t("langPillLabel")}
+            </span>
+            <div className="size-[20px] shrink-0 mt-[1px]">
+              <svg className="block size-full" fill="none" viewBox="0 0 25.8 25.8">
+                 <path d={headerSvgPaths.p2e913cc0} fill="white" />
               </svg>
             </div>
-          </div>
+          </button>
           {/* Hamburger */}
           <div className="absolute h-[16px] left-[24px] top-[24px] w-[21px]">
             <div className="absolute inset-[-1.56%_-1.19%]">
@@ -179,6 +177,7 @@ function PersistentHeader({ onMenuOpen }: { onMenuOpen: () => void }) {
           </div>
         </div>
       </div>
+      <LangPickerModal open={langOpen} onClose={() => setLangOpen(false)} />
     </div>
   );
 }

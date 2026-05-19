@@ -2,6 +2,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import headerSvgPaths from "../../imports/1TodayBoardHomeScreen-1/svg-dgyex2e769";
 import { Screen5 } from "./screens/Screen5";
+import { useLanguage } from "../i18n/LanguageContext";
+import { useTranslations } from "../i18n/translations";
+import { LangPickerModal } from "./screens/LangPickerModal";
 
 // ─── Images (relative imports matching the Figma source directories) ──────────
 import imgImage2 from "../../imports/1TaskListHomeFinalColor/f068387a9ecb0831125f5b8205e70bd6b4c10d22.png";
@@ -113,6 +116,9 @@ function BackChevron() {
 
 // ─── SITEFLOW Header (Active Tasks home only) ─────────────────────────────────
 function SiteflowHeader({ onHamburger }: { onHamburger: () => void }) {
+  const { lang } = useLanguage();
+  const t = useTranslations(lang);
+  const [langOpen, setLangOpen] = useState(false);
   return (
     <div
       className="absolute top-0 left-0 right-0 overflow-hidden"
@@ -131,30 +137,16 @@ function SiteflowHeader({ onHamburger }: { onHamburger: () => void }) {
       >
         <div className="absolute bg-[#fbf9f8] h-[64px] left-0 top-0 w-[412px]">
           {/* Language toggle */}
-          <div className="absolute bg-[#7a3100] h-[31px] left-[308px] rounded-[28.615px] top-[17px] w-[71.538px]" />
-          <div
-            className="-translate-y-1/2 absolute capitalize flex flex-col font-['Outfit:Regular','Noto_Sans_Kannada:Regular',sans-serif] justify-center leading-[0] left-[343.77px] text-[15.296px] text-white top-[31.08px] tracking-[-0.1683px] whitespace-nowrap"
-            style={{ fontVariationSettings: "'wdth' 100, 'wght' 400" }}
-          >
-            <p className="leading-[1.5]">ಕನ್ನ</p>
-          </div>
-          <div className="absolute left-[317.94px] size-[25.833px] top-[19.58px]">
-            <svg
-              className="absolute block inset-0 size-full"
-              fill="none"
-              preserveAspectRatio="none"
-              viewBox="0 0 25.8333 25.8333"
-            >
-              <g clipPath="url(#wk-hdr-clip)">
-                <path d={headerSvgPaths.p2e913cc0} fill="white" />
-              </g>
-              <defs>
-                <clipPath id="wk-hdr-clip">
-                  <rect fill="white" height="25.8333" width="25.8333" />
-                </clipPath>
-              </defs>
-            </svg>
-          </div>
+          <button onClick={() => setLangOpen(true)} className="absolute bg-[#7a3100] h-[31px] left-[300px] rounded-[28.615px] top-[17px] px-[12px] flex items-center gap-[6px] cursor-pointer active:opacity-80 transition-opacity" style={{ border: 'none', zIndex: 20 }}>
+            <span className="capitalize font-['Outfit:Regular',sans-serif] text-[15.3px] text-white whitespace-nowrap leading-none">
+              {t("langPillLabel")}
+            </span>
+            <div className="size-[20px] shrink-0 mt-[1px]">
+              <svg className="block size-full" fill="none" viewBox="0 0 25.8 25.8">
+                 <path d={headerSvgPaths.p2e913cc0} fill="white" />
+              </svg>
+            </div>
+          </button>
           {/* Hamburger hit area */}
           <button
             onClick={onHamburger}
@@ -187,6 +179,7 @@ function SiteflowHeader({ onHamburger }: { onHamburger: () => void }) {
           </div>
         </div>
       </div>
+      <LangPickerModal open={langOpen} onClose={() => setLangOpen(false)} />
     </div>
   );
 }
